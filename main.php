@@ -86,9 +86,17 @@ $_SESSION['user'] = [
 			        $query = mysqli_query($con, 'SELECT * FROM post ORDER BY id DESC');
 					?>
 					<?php for ($i = 0; $i < $query->num_rows; $i++) { ?>
-						<?php  $post=$query->fetch_assoc(); ?>
+						<?php  $post=$query->fetch_assoc(); 
+						  		$authorId = $post['author_id'];
+    							$postId = $post['id'];
+
+    							$userResult = mysqli_query($con, "SELECT * FROM users WHERE id=$authorId");
+   								 $user = mysqli_fetch_assoc($userResult);
+    							$avatar = $user['avatar'];
+
+    							if($authorId == $_SESSION['userId']) { // проверяем соответствие идентификаторов?>
 			            <div class="col-2">
-			              <img src="<?= $_SESSION['user']['avatar'] ?>" class="rounded-circle w-50">
+			              <img src="<?= $avatar ?>" class="rounded-circle w-50">
 			            </div>
 			            <div class="col-10">
 			              	<div class="row">
@@ -125,7 +133,39 @@ $_SESSION['user'] = [
 				                </div>
 			              	</div>
 			            </div>
+			           <?php } else {?>
+			            <div class="col-2">
+			              <img src="<?= $avatar ?>" class="rounded-circle w-50">
+			            </div>
+			            <div class="col-10">
+			              	<div class="row">
+			                	<h5>
+			                 	 	<a href="#" class="text-dark"><?php echo $post['name'] ?></a>
+			                	</h5>
+			              	</div>
+			              	<div>
+			                	<p><?php echo $post['text'] ?></p>
+			              	</div>
+			              	<div>
+				                <img src="<?php  echo $post['img']?>" class="w-100 rounded">
+			              	</div>
+			              	<div class="row">
+				                <div class="col-3">
+				                  <img src="images/like.png">
+				                </div>
+				                <div class="col-3">
+				                  <img src="images/comment.png">
+				                </div>
+				                <div class="col-3">
+				                   <img src="images/envelope.png">
+				                </div>
+				                <div class="col-3">
+				                   <img src="images/retweet.png">
+				                </div>
+			              	</div>
+			            </div>
 			           <?php } ?>
+			          <?php } ?>
 					<!--post 1 ends-->
 				</div>
 			</div>
